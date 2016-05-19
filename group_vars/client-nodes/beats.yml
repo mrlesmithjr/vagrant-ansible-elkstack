@@ -1,0 +1,4 @@
+---
+es_filebeat_elasticsearch_host: 'node0:9200'
+es_packetbeat_elasticsearch_host: 'node0:9200'
+es_topbeat_elasticsearch_host: 'node0:9200'
