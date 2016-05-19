@@ -1,10 +1,14 @@
 ---
-- src: https://github.com/mrlesmithjr/ansible-base.git
-- src: https://github.com/mrlesmithjr/ansible-bashrc.git
-- src: https://github.com/mrlesmithjr/ansible-bootstrap.git
-- src: https://github.com/mrlesmithjr/ansible-etc-hosts.git
-- src: https://github.com/mrlesmithjr/ansible-hashicorp-toolbox.git
-- src: https://github.com/mrlesmithjr/ansible-ntp.git
-- src: https://github.com/mrlesmithjr/ansible-rsyslog.git
-- src: https://github.com/mrlesmithjr/ansible-timezone.git
-- src: https://github.com/mrlesmithjr/ansible-users.git
+- src: https://github.com/mrlesmithjr/ansible-apache2
+- src: https://github.com/mrlesmithjr/ansible-dnsmasq
+- src: https://github.com/mrlesmithjr/ansible-elasticsearch
+- src: https://github.com/mrlesmithjr/ansible-elk-kibana
+- src: https://github.com/mrlesmithjr/ansible-es-filebeat
+- src: https://github.com/mrlesmithjr/ansible-es-packetbeat
+- src: https://github.com/mrlesmithjr/ansible-es-topbeat
+- src: https://github.com/mrlesmithjr/ansible-logstash
+- src: https://github.com/mrlesmithjr/ansible-mariadb-mysql
+- src: https://github.com/mrlesmithjr/ansible-ntp
+- src: https://github.com/mrlesmithjr/ansible-redis
+- src: https://github.com/mrlesmithjr/ansible-rsyslog
+- src: https://github.com/mrlesmithjr/ansible-timezone

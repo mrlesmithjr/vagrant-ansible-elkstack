@@ -1,0 +1,45 @@
+---
+- name: config_topbeat | configuring topbeat
+  template:
+    src: "etc/topbeat/topbeat.yml.j2"
+    dest: "/etc/topbeat/topbeat.yml"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify:
+    - 'restart topbeat'
+    
+- name: config_topbeat | checking status of topbeat ES Index Template import
+  stat:
+    path: "/etc/topbeat/.topbeat_es_index_template_imported"
+  register: "topbeat_es_index_template_imported_check"
+
+- name: config_topbeat | loading topbeat ES Index Template
+  command: "curl -XPUT 'http://{{ es_topbeat_elasticsearch_host }}/_template/topbeat' -d@/etc/topbeat/topbeat.template.json"
+  register: "topbeat_es_index_template_imported"
+  when: not topbeat_es_index_template_imported_check.stat.exists
+
+- name: config_topbeat | marking topbeat ES Index Template as imported
+  file:
+    path: "/etc/topbeat/.topbeat_es_index_template_imported"
+    state: "touch"
+  when: topbeat_es_index_template_imported.changed
+
+- name: config_topbeat | downloading topbeat dashboards
+  get_url:
+    url: "{{ es_topbeat_dashboard_dl }}"
+    dest: "/opt/{{ es_topbeat_dashboard_package }}"
+
+- name: config_topbeat | extracting topbeat dashboards
+  unarchive:
+    src: "/opt/{{ es_topbeat_dashboard_package }}"
+    dest: "/opt"
+    copy: no
+    creates: "{{ es_topbeat_dashboard_dir }}/load.sh"
+  register: "extract_topbeat_dashboards"
+
+- name: config_topbeat | loading topbeat dashboards
+  shell: "./load.sh -url http://{{ es_topbeat_elasticsearch_host }}"
+  args:
+    chdir: "{{ es_topbeat_dashboard_dir }}"
+  when: extract_topbeat_dashboards.changed
