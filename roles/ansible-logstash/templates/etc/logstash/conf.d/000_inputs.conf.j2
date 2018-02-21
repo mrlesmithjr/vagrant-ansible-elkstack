@@ -1,5 +1,3 @@
-# {{ ansible_managed }}
-#
 {% if logstash_base_file_inputs is defined %}
 {%   for item in logstash_base_file_inputs %}
 input {
@@ -69,5 +67,18 @@ input {
 }
 {%       endif %}
 {%     endif %}
+{%   endfor %}
+{% endif %}
+
+{% if logstash_custom_inputs is defined %}
+{%   for item in logstash_custom_inputs %}
+
+input {
+  {{ item.input }} {
+  {% for line in item.lines %}
+      {{ line }}
+  {% endfor %}
+  }
+}
 {%   endfor %}
 {% endif %}

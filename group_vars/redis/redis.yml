@@ -1,0 +1,6 @@
+---
+redis_bind_addresses:
+  - 127.0.0.1
+  - "{{ hostvars[inventory_hostname]['ansible_'+redis_replication_interface]['ipv4']['address'] }}"
+redis_replication: true
+redis_replication_interface: "{{ pri_interface }}"

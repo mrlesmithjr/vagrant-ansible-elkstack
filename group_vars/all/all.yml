@@ -1,0 +1,8 @@
+---
+pri_domain_name: test.vagrant.local
+
+pri_interface: enp0s8
+
+timezone: UTC
+
+vip: 192.168.250.100

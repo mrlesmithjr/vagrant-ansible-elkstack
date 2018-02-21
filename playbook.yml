@@ -1,72 +1,45 @@
 ---
 - hosts: all
-  become: true
-  vars:
   roles:
-  tasks:
-    - name: pre-reqs
-      dnf:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - libselinux-python
-      when: >
-            (ansible_os_family == "RedHat" and
-            ansible_distribution == "Fedora")
+    - role: ansible-change-hostname
+    - role: ansible-etc-hosts
+    - role: ansible-ntp
+    - role: ansible-timezone
+    - role: ansible-rsyslog
 
-    - name: pre-reqs
-      yum:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - libselinux-python
-      when: >
-            (ansible_os_family == "RedHat" and
-            ansible_distribution != "Fedora")
+# - hosts: redis
+#   roles:
+#     - role: ansible-redis
 
-    - name: updating /etc/hosts
-      lineinfile:
-        dest: /etc/hosts
-        regexp: "^{{ hostvars[item].ansible_ssh_host }} {{ item }} {{ item }}.{{ pri_domain_name }}"
-        line: "{{ hostvars[item].ansible_ssh_host }} {{ item }} {{ item }}.{{ pri_domain_name }}"
-        state: present
-      with_items: groups['all']
+- hosts: rabbitmq
+  roles:
+    - role: ansible-rabbitmq
 
-- hosts: elk-nodes
-  become: true
-  vars:
-  handlers:
-    - name: restart logstash
-      service:
-        name: "logstash"
-        state: restarted
+- hosts: pre_processors
   roles:
     - role: ansible-dnsmasq
-#    - role: ansible-nodejs
-    - role: ansible-ntp
-    - role: ansible-rsyslog
-    - role: ansible-timezone
-    - role: ansible-redis
-    - role: ansible-elasticsearch
     - role: ansible-logstash
-    - role: ansible-elk-kibana
-  tasks:
-    - name: config_logstash | configuring logstash
-      template:
-        src: "templates/etc/logstash/conf.d/{{ item }}.conf.j2"
-        dest: "{{ logstash_config_dir }}/{{ item }}.conf"
-        owner: logstash
-        group: logstash
-        mode: 0644
-      notify: restart logstash
-      with_items: '{{ logstash_configs }}'
+    - role: ansible-elk-pre-processor
 
-- hosts: client-nodes
-  become: true
-  vars:
+- hosts: processors
   roles:
-    - role: ansible-apache2
-    - role: ansible-es-filebeat
-    - role: ansible-es-packetbeat
-    - role: ansible-es-topbeat
-    - role: ansible-mariadb-mysql
+    - role: ansible-dnsmasq
+    - role: ansible-logstash
+    - role: ansible-elk-processor
+
+- hosts: elasticsearch
+  roles:
+    - role: ansible-elasticsearch
+
+- hosts: grafana
+  roles:
+    - role: ansible-grafana
+
+- hosts: kibana
+  roles:
+    - role: ansible-kibana
+
+- hosts: loadbalancer
+  roles:
+    - role: ansible-keepalived
+    - role: ansible-haproxy

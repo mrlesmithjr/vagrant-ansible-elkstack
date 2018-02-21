@@ -1,3 +1,0 @@
----
-# defaults file for ansible-redis
-redis_allow_remote_connections: false  #defines if redis should allow connections on all interfaces

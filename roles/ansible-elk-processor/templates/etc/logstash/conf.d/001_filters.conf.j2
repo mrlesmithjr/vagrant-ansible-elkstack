@@ -1,0 +1,18 @@
+{{ ansible_managed|comment }}
+{% if logstash_pre_tagging != [] %}
+filter {
+{%   for item in logstash_pre_tagging %}
+  if [type] == "{{ item.type }}" {
+    mutate {
+      add_tag => [
+{%     for tag in item.tags %}
+        "{{ tag }}"
+{%       if not loop.last %},
+{%       endif %}
+      ]
+{%     endfor %}
+    }
+  }
+{%   endfor %}
+}
+{% endif %}

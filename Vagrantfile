@@ -6,162 +6,187 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 
-# ---- Define number of nodes to spin up ----
-N = 3
+# Ensure yaml module is loaded
+require 'yaml'
 
-# ---- Define any custom memory/cpu requirement ----
-# if custom requirements are desired...ensure to set
-# custom_cpu_mem == "yes" otherwise set to "no"
-# By default if custom requirements are defined and set below
-# any node not defined will be configured as the default...
-# which is 1vCPU/512mb...So if setting custom requirements
-# only define any node which requires more than the defaults.
-nodes = [
-  {
-    :node => "node0",
-    :cpu => 1,
-    :mem => 4096
-  }
-]
+# Read yaml node definitions to create
+# **Update nodes.yml to reflect any changes
+nodes = YAML.load_file(File.join(File.dirname(__FILE__), 'nodes.yml'))
 
-# ---- Define variables below ----
-additional_disks = "no"  #Define if additional drives defined should be added (yes | no)
-additional_disks_controller = "SATA Controller"
-additional_disks_num = 1  #Define the number of additional disks to add
-additional_disks_size = 10  #Define disk size in GB
-additional_nics = "yes"  #Define if additional network adapters should be created (yes | no)
-additional_nics_dhcp = "yes"  #Define if additional network adapters should be DHCP assigned
-additional_nics_num = 1  #Define the number of additional nics to add
-box = "mrlesmithjr/trusty64"  #Define Vagrant box to load
-custom_cpu_mem = "yes"  #Define if custom cpu and memory requirements are needed (yes| no)...defined within nodes variable above
-desktop = "no"  #Define if running desktop OS (yes | no)
-enable_port_forwards = "yes"  #Define if port forwards should be enabled
-linked_clones = "no"  #Defines if nodes should be linked from master VM (yes | no)
-port_forwards = [
-  {
-    :node => "node0",
-    :guest => 80,
-    :host => 8080
-  },
-  {
-    :node => "node0",
-    :guest => 5044,
-    :host => 5044
-  },
-  { :node => "node0",
-    :guest => 5601,
-    :host => 5601
-  },
-  {
-    :node => "node0",
-    :guest => 9200,
-    :host => 9200
-  },
-  {
-    :node => "node0",
-    :guest => 10514,
-    :host => 10514
-  }
-]
-provision_nodes = "yes"  #Define if provisioners should run (yes | no)
-server_cpus = 2  #Define number of CPU cores...will be ignored if custom_cpu_mem == "yes"
-server_memory = 4096  #Define amount of memory to assign to node(s)...will be ignored if custom_cpu_mem == "yes"
-subnet = "192.168.202."  #Define subnet for private_network
-subnet_ip_start = 200  #Define starting last octet of the subnet range to begin addresses for node(s)
+# Define global variables
+#
 
 Vagrant.configure(2) do |config|
+  # Iterate over nodes to get a count
+  # Define as 0 for counting the number of nodes to create from nodes.yml
+  groups = [] # Define array to hold ansible groups
+  num_nodes = 0
+  populated_ansible_groups = {} # Create hash to contain iterated groups
 
-  #Iterate over nodes
-  (1..N).each do |node_id|
-    nid = (node_id - 1)
-
-    config.vm.define "node#{nid}" do |node|
-      node.vm.box = box
-      node.vm.provider "virtualbox" do |vb|
-        if linked_clones == "yes"
-          vb.linked_clone = true
-        end
-        if custom_cpu_mem == "no"
-          vb.customize ["modifyvm", :id, "--cpus", server_cpus]
-          vb.customize ["modifyvm", :id, "--memory", server_memory]
-        end
-        if custom_cpu_mem == "yes"
-          nodes.each do |cust_node|
-            if cust_node[:node] == "node#{nid}"
-              vb.customize ["modifyvm", :id, "--cpus", cust_node[:cpu]]
-              vb.customize ["modifyvm", :id, "--memory", cust_node[:mem]]
-            end
-          end
-        end
-        if desktop == "yes"
-          vb.gui = true
-          vb.customize ["modifyvm", :id, "--graphicscontroller", "vboxvga"]
-          vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
-          vb.customize ["modifyvm", :id, "--ioapic", "on"]
-          vb.customize ["modifyvm", :id, "--vram", "128"]
-          vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
-        end
-        if additional_disks == "yes"
-          (1..additional_disks_num).each do |disk_num|
-            dnum = (disk_num + 1)
-            ddev = ("node#{nid}_Disk#{dnum}.vdi")
-            unless File.exist?("#{ddev}")
-              vb.customize ['createhd', '--filename', ("#{ddev}"), '--variant', 'Fixed', '--size', additional_disks_size * 1024]
-            end
-            vb.customize ['storageattach', :id,  '--storagectl', "#{additional_disks_controller}", '--port', dnum, '--device', 0, '--type', 'hdd', '--medium', "node#{nid}_Disk#{dnum}.vdi"]
-          end
-        end
-      end
-      node.vm.hostname = "node#{nid}"
-
-      ### Define additional network adapters below
-      if additional_nics == "yes"
-        if additional_nics_dhcp == "no"
-          (1..additional_nics_num).each do |nic_num|
-            nnum = Random.rand(0..50)
-            node.vm.network :private_network, ip: subnet+"#{subnet_ip_start + nid + nnum}"
-          end
-        end
-        if additional_nics_dhcp == "yes"
-          (1..additional_nics_num).each do |nic_num|
-            node.vm.network :private_network, type: "dhcp"
-          end
-        end
-      end
-
-      ### Define port forwards below
-      if enable_port_forwards == "yes"
-        port_forwards.each do |pf|
-          if pf[:node] == "node#{nid}"
-            node.vm.network "forwarded_port", guest: pf[:guest], host: pf[:host] + nid
-          end
-        end
-      end
-      if provision_nodes == "yes"
-        if node_id == N
-          node.vm.provision "ansible" do |ansible|  #runs bootstrap Ansible playbook
-            ansible.limit = "all"
-            ansible.playbook = "bootstrap.yml"
-          end
-          node.vm.provision "ansible" do |ansible|  #runs Ansible playbook for installing roles/executing tasks
-            ansible.limit = "all"
-            ansible.playbook = "playbook.yml"
-            ansible.groups = {
-              "elk-nodes" => [
-                "node0"
-              ],
-              "client-nodes" => [
-                "node1",
-                "node2"
-              ]
-            }
-          end
-        end
-      end
-
+  # Create array of Ansible Groups from iterated nodes
+  nodes.each do |node|
+    num_nodes = node
+    node['ansible_groups'].each do |group|
+      groups.push(group)
     end
   end
-  if provision_nodes == "yes"
-    config.vm.provision :shell, path: "bootstrap.sh", keep_color: "true"  #runs initial shell script
+
+  # Remove duplicate Ansible Groups
+  groups = groups.uniq
+
+  # Iterate through array of Ansible Groups
+  groups.each do |group|
+    group_nodes = []
+    # Iterate list of nodes
+    nodes.each do |node|
+      node['ansible_groups'].each do |nodegroup|
+        # Check if node is a member of iterated group
+        group_nodes.push(node['name']) if nodegroup == group
+      end
+      populated_ansible_groups[group] = group_nodes
+    end
+  end
+
+  # Dynamic Ansible Groups iterated from nodes.yml
+  ansible_groups = populated_ansible_groups
+
+  # Define Ansible groups statically for more control
+  # ansible_groups = {
+  #   "spines" => ["node0", "node7"],
+  #   "leafs" => ["node[1:2]", "node[8:9]"],
+  #   "quagga-routers:children" => ["spines", "leafs", "compute-nodes"],
+  #   "compute-nodes" => ["node[3:6]"],
+  #   "docker-swarm:children" => ["docker-swarm-managers", "docker-swarm-workers"],
+  #   "docker-swarm-managers" => ["node[3:4]"],
+  #   "docker-swarm-workers" => ["node[5:6]"]
+  # }
+
+  # Iterate over nodes
+  nodes.each do |node_id|
+    # Below is needed if not using Guest Additions
+    # config.vm.synced_folder ".", "/vagrant", type: "rsync",
+    #   rsync__exclude: "hosts"
+    config.vm.define node_id['name'] do |node|
+      unless node_id['synced_folder'].nil?
+        unless node_id['synced_folder']['type'].nil?
+          config.vm.synced_folder '.', '/vagrant', type: node_id['synced_folder']['type']
+        end
+      end
+      node.vm.box = node_id['box']
+      node.vm.hostname = node_id['name']
+      node.vm.provider 'virtualbox' do |vb|
+        vb.memory = node_id['mem']
+        vb.cpus = node_id['vcpu']
+
+        # Setup desktop environment
+        unless node_id['desktop'].nil?
+          if node_id['desktop']
+            vb.gui = true
+            vb.customize ['modifyvm', :id, '--accelerate3d', 'on']
+            vb.customize ['modifyvm', :id, '--graphicscontroller', 'vboxvga']
+            vb.customize ['modifyvm', :id, '--hwvirtex', 'on']
+            vb.customize ['modifyvm', :id, '--ioapic', 'on']
+            vb.customize ['modifyvm', :id, '--vram', '128']
+          end
+        end
+
+        # Setup Windows Server
+        unless node_id['windows'].nil?
+          if node_id['windows']
+            vb.gui = true
+            vb.customize ['modifyvm', :id, '--accelerate2dvideo', 'on']
+            vb.customize ['modifyvm', :id, '--accelerate3d', 'on']
+            vb.customize ['modifyvm', :id, '--clipboard', 'bidirectional']
+            vb.customize ['modifyvm', :id, '--vram', '128']
+          end
+        end
+
+        # Add additional disk(s)
+        unless node_id['disks'].nil?
+          dnum = 0
+          node_id['disks'].each do |disk_num|
+            dnum = (dnum.to_i + 1)
+            ddev = "#{node_id['name']}_Disk#{dnum}.vdi"
+            dsize = disk_num['size'].to_i * 1024
+            unless File.exist?(ddev.to_s)
+              vb.customize ['createhd', '--filename', ddev.to_s, \
+                            '--variant', 'Fixed', '--size', dsize]
+            end
+            vb.customize ['storageattach', :id, '--storagectl', \
+                          (disk_num['controller']).to_s, '--port', dnum, '--device', 0, \
+                          '--type', 'hdd', '--medium', ddev.to_s]
+          end
+        end
+      end
+
+      # Provision network interfaces
+      unless node_id['interfaces'].nil?
+        node_id['interfaces'].each do |int|
+          if int['method'] == 'dhcp'
+            if int['network_name'] == 'None'
+              node.vm.network :private_network, \
+                              type: 'dhcp'
+            end
+            if int['network_name'] != 'None'
+              node.vm.network :private_network, \
+                              virtualbox__intnet: int['network_name'], \
+                              type: 'dhcp'
+            end
+          end
+          next unless int['method'] == 'static'
+          if int['network_name'] == 'None'
+            node.vm.network :private_network, \
+                            ip: int['ip'], \
+                            auto_config: int['auto_config']
+          end
+          next unless int['network_name'] != 'None'
+          node.vm.network :private_network, \
+                          virtualbox__intnet: int['network_name'], \
+                          ip: int['ip'], \
+                          auto_config: int['auto_config']
+        end
+      end
+
+      # Port Forwards
+      unless node_id['port_forwards'].nil?
+        node_id['port_forwards'].each do |pf|
+          node.vm.network :forwarded_port, \
+                          guest: pf['guest'], \
+                          host: pf['host']
+        end
+      end
+
+      # Provisioners
+      unless node_id['provision'].nil?
+        if node_id['provision']
+          unless node_id['windows'].nil?
+            # runs initial script
+            if node_id['windows']
+              node.vm.provision 'shell', path: 'scripts/ConfigureRemotingForAnsible.ps1'
+            else
+              node.vm.provision :shell, path: 'scripts/bootstrap.sh', keep_color: 'true'
+            end
+          end
+          if node_id == num_nodes
+            node.vm.provision 'ansible' do |ansible|
+              ansible.limit = 'all'
+              # Sets up host_vars
+              ansible.playbook = 'prep_host_vars.yml'
+            end
+            node.vm.provision 'ansible' do |ansible|
+              ansible.limit = 'all'
+              # runs bootstrap Ansible playbook
+              ansible.playbook = 'bootstrap.yml'
+            end
+            node.vm.provision 'ansible' do |ansible|
+              ansible.limit = 'all'
+              # runs Ansible playbook for installing roles/executing tasks
+              ansible.playbook = 'playbook.yml'
+              ansible.groups = ansible_groups
+            end
+          end
+        end
+      end
+    end
   end
 end

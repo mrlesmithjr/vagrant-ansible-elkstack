@@ -1,0 +1,18 @@
+---
+# defines if rsyslog should be reconfigured
+rsyslog_config: true
+
+# defines primary domain name
+rsyslog_pri_domain_name: "{{ pri_domain_name }}"
+
+# defines if rsyslog should be configured to listen on tcp/514
+rsyslog_allow_tcp: false
+
+# defines if rsyslog should be configured to listen on udp/514
+rsyslog_allow_udp: false
+
+# defines remote syslog servers
+rsyslog_servers:
+  - name: "{{ vip }}"
+    proto: tcp
+    port: 10514

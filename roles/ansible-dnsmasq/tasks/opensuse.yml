@@ -1,11 +1,13 @@
 ---
-- name: opensuse | installing dnsmasq
+- name: opensuse | Installing DNSMasq
   zypper:
     name: "dnsmasq"
-    state: present
+    state: "present"
+  become: true
 
-- name: opensuse | enabling on boot and started
+- name: opensuse | Ensuring DNSMasq Service Is Enabled and Started
   service:
-    name: dnsmasq
-    state: started
+    name: "dnsmasq"
+    state: "started"
     enabled: yes
+  become: true

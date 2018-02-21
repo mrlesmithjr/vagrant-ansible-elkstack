@@ -1,8 +1,0 @@
----
-- name: Installs MariaDB mySQL
-  hosts: all
-  become: true
-  vars:
-  roles:
-    - role: ansible-mariadb-mysql
-  tasks:

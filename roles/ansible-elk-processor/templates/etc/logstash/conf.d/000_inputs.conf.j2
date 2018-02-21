@@ -1,0 +1,47 @@
+{{ ansible_managed|comment }}
+{% if logstash_file_inputs != [] %}
+{%   for item in logstash_file_inputs %}
+input {
+  file {
+    path => "{{ item.path }}"
+    type => "{{ item.type }}"
+    sincedb_path => "/dev/null"
+  }
+}
+{%   endfor %}
+{% endif %}
+{% if logstash_inputs is defined %}
+{%   for item in logstash_inputs %}
+{%     if item.type == "redis" %}
+input {
+  redis {
+    host => "{{ item.host }}"
+    data_type => "list"
+{%         if item.batch_count is defined %}
+    batch_count => "{{ item.batch_count }}"
+{%         endif %}
+    key => "logstash"
+{%         if item.threads is defined %}
+    threads => "{{ item.threads }}"
+{%         endif %}
+  }
+}
+{%     endif %}
+{%     if item.type == "rabbitmq" %}
+input {
+  rabbitmq {
+    host => "{{ item.host }}"
+{%       if item.exchange is defined %}
+    exchange => "{{ item.exchange }}"
+{%       endif %}
+{%       if item['user'] is defined %}
+    user => "{{ item['user'] }}"
+{%       endif %}
+{%       if item['password'] is defined %}
+    password => "{{ item['password'] }}"
+{%       endif %}
+  }
+}
+{%     endif %}
+{%   endfor %}
+{% endif %}

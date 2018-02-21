@@ -1,149 +1,108 @@
-Role Name
-=========
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-Installs logstash https://www.elastic.co/products/logstash
+- [ansible-logstash](#ansible-logstash)
+  - [Requirements](#requirements)
+  - [Vagrant](#vagrant)
+  - [Role Variables](#role-variables)
+  - [Dependencies](#dependencies)
+  - [Example Playbook](#example-playbook)
+  - [License](#license)
+  - [Author Information](#author-information)
 
-Requirements
-------------
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Default config if config_logstash=true is to open tcp/udp 10514 because ports < 1024 require root access.  
-Configure clients to send to udp/tcp 10514.  
-You can configure rsyslog to listen on tcp/udp 514 and redirect rsyslog to send to localhost on tcp/udp 10514
-to accomodate clients which cannot send to a different port. See example below.  
-###### /etc/rsyslog.d/50-default.conf
-tcp
-````
+# ansible-logstash
+
+An [Ansible](https://www.ansible.com) role that Installs/configures [Logstash](https://www.elastic.co/products/logstash)
+
+## Requirements
+
+Default config if `config_logstash=true` is to open `tcp/udp 10514` because
+ports \< 1024 require root access. Configure clients to send to `udp/tcp 10514`.
+You can configure rsyslog to listen on `tcp/udp 514` and redirect rsyslog
+to send to localhost on `tcp/udp 10514` to accomodate clients which cannot
+send to a different port. See example below:
+
+`/etc/rsyslog.d/50-default.conf`
+
+`tcp`:
+
+```bash
 *.* @@localhost:10514
-````
-udp
-````
+```
+
+`udp`:
+
+```bash
 *.* @localhost:10514
-````
+```
 
-Vagrant
--------
-Spin up a Vagrant test environment  
-````
+## Vagrant
+
+Spin up a Vagrant test environment
+
+```bash
 vagrant up
-````
-When done testing you can tear-down  
-````
+```
+
+When done testing you can tear-down
+
+```bash
 ./cleanup.sh
-````
+```
 
-Docker
-------
-Latest version
+## Role Variables
 
-````
-docker run -d mrlesmithjr/logstash -f /etc/logstash/conf.d
-````
-Specific version  
-````
-docker run -d mrlesmithjr/logstash:2.2 -f /etc/logstash/conf.d
-````  
+[default vars](./defaults/main.yml)
 
-Role Variables
---------------
+Use your own outputs:
 
-````
----
-# defaults file for ansible-logstash
-clear_logstash_config: false  #defines if logstash_config_dir should be cleared out
-config_logstash: false  #defines if logstash should be configured
-logstash_config_dir: /etc/logstash/conf.d
-logstash_base_configs:
-  - 000_inputs
-#  - 001_filters
-#  - 002_metrics  #comment out if metrics for logstash processing are not required..good for keeping track of throughput...removed because of incompatabilities w/ES 2.x
-  - 999_outputs
-logstash_base_file_inputs:
-  - path: /var/log/nginx/access.log
-    type: nginx-access
-  - path: /var/log/nginx/error.log
-    type: nginx-error
-  - path: /var/log/mail.log
-    type: postfix-log
-  - path: /var/log/redis/redis-server.log
-    type: redis-server
-logstash_base_inputs:  #define inputs below to configure
-  - prot: tcp
-    port: 10514  #gets around port < 1024 (Note...Configure clients to send to 10514 instead of default 514)
-    type: syslog
-  - prot: udp
-    port: 10514  #gets around port < 1024 (Note...Configure clients to send to 10514 instead of default 514)
-    type: syslog
-#  - type: beats
-#    port: 5044
-#  - type: redis
-#    batch_count: 1000
-#    host: '{{ logstash_server_fqdn }}'
-#    threads: 2
-#  - type: syslog
-#    port: 514  #reminder....ports < 1024 require root access..
-logstash_deb_repo: 'deb http://packages.elastic.co/logstash/{{ logstash_version }}/debian stable main'
-logstash_folder: /opt/logstash
-logstash_base_outputs:
-  - output: redis
-    output_host: '{{ logstash_server_fqdn }}'
-logstash_log_dir: /var/log/logstash
-logstash_plugins:
-  - logstash-codec-nmap
-  - logstash-filter-elasticsearch
-  - logstash-filter-json_encode
-  - logstash-filter-translate
-#  - logstash-filter-zeromq
-  - logstash-input-beats
-#  - logstash-output-jira
-  - logstash-output-slack
-logstash_repo_key: https://packages.elastic.co/GPG-KEY-elasticsearch
-logstash_server_fqdn: 'logstash.{{ pri_domain_name }}'  #defines logstash server to send to...fqdn or localhost
-logstash_version: 2.2
-#logstash_version: 2.1
-#logstash_version: 1.5
-pri_domain_name: 'example.org'
-````
+Example:
 
-Dependencies
-------------
+```yaml
+logstash_custom_outputs:
+  - output: 'gelf'
+    lines:
+      - 'host => "localhost"'
+      - 'port => "12201"'
+```
+
+Additional variables for customized configs:
+
+```yaml
+logstash_custom_inputs:
+  - input: someinput
+    lines:
+      - 'somekey => "value"'
+
+logstash_custom_filters:
+  - lines:
+      - 'somekey => "value"'
+
+logstash_custom_outputs:
+  - output: someoutput
+    lines:
+      - 'somekey => "value"'
+```
+
+## Dependencies
 
 None
 
-Example Playbook
-----------------
+## Example Playbook
 
-#### GitHub
-````
----
-- hosts: all
-  sudo: true
-  vars:
-    - config_logstash: true
-  roles:
-    - role: ansible-logstash
-  tasks:
-````
-#### Galaxy
-````
----
-- hosts: all
-  sudo: true
-  vars:
-    - config_logstash: true
-  roles:
-    - role: mrlesmithjr.logstash
-  tasks:
-````
+[Example Playbook](./playbook.yml)
 
-License
--------
+## License
 
 BSD
 
-Author Information
-------------------
+## Author Information
 
 Larry Smith Jr.
-- @mrlesmithjr
-- http://everythingshouldbevirtual.com
-- mrlesmithjr [at] gmail.com
+
+-   [@mrlesmithjr](https://www.twitter.com/mrlesmithjr)
+-   [EverythingShouldBeVirtual](http://everythingshouldbevirtual.com)
+-   mrlesmithjr [at] gmail.com

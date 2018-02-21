@@ -1,0 +1,352 @@
+---
+- name: lb-01-1
+  ansible_groups:
+    - loadbalancer
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.11
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 512
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: lb-01-2
+  ansible_groups:
+    - loadbalancer
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.12
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 512
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: rabbit-01
+  ansible_groups:
+    - rabbitmq
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.21
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 512
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: rabbit-02
+  ansible_groups:
+    - rabbitmq
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.22
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 512
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: rabbit-03
+  ansible_groups:
+    - rabbitmq
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.23
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 512
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: pre-processor-01
+  ansible_groups:
+    - pre_processors
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.31
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 1024
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+# - name: pre-processor-02
+#   ansible_groups:
+#     - pre_processors
+#   box: mrlesmithjr/xenial64
+#   desktop: false
+#   # disks:
+#   #   - size: 10
+#   #     controller: "SATA Controller"
+#   #   - size: 10
+#   #     controller: "SATA Controller"
+#   interfaces:
+#     - ip: 192.168.250.32
+#       auto_config: true
+#       method: static
+#   #   - ip: 192.168.1.10
+#   #     auto_config: false
+#   #     method: static
+#   #     network_name: network-1
+#   mem: 1024
+#   provision: true
+#   vcpu: 1
+#   # port_forwards:
+#   #   - guest: 80
+#   #     host: 8080
+#   #   - guest: 443
+#   #     host: 4433
+#   windows: false
+- name: processor-01
+  ansible_groups:
+    - processors
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.41
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 1024
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: es-01
+  ansible_groups:
+    - elasticsearch
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.51
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 2048
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+# - name: es-02
+#   ansible_groups:
+#     - elasticsearch
+#   box: mrlesmithjr/xenial64
+#   desktop: false
+#   # disks:
+#   #   - size: 10
+#   #     controller: "SATA Controller"
+#   #   - size: 10
+#   #     controller: "SATA Controller"
+#   interfaces:
+#     - ip: 192.168.250.52
+#       auto_config: true
+#       method: static
+#   #   - ip: 192.168.1.10
+#   #     auto_config: false
+#   #     method: static
+#   #     network_name: network-1
+#   mem: 2048
+#   provision: true
+#   vcpu: 1
+#   # port_forwards:
+#   #   - guest: 80
+#   #     host: 8080
+#   #   - guest: 443
+#   #     host: 4433
+#   windows: false
+# - name: es-03
+#   ansible_groups:
+#     - elasticsearch
+#   box: mrlesmithjr/xenial64
+#   desktop: false
+#   # disks:
+#   #   - size: 10
+#   #     controller: "SATA Controller"
+#   #   - size: 10
+#   #     controller: "SATA Controller"
+#   interfaces:
+#     - ip: 192.168.250.53
+#       auto_config: true
+#       method: static
+#   #   - ip: 192.168.1.10
+#   #     auto_config: false
+#   #     method: static
+#   #     network_name: network-1
+#   mem: 2048
+#   provision: true
+#   vcpu: 1
+#   # port_forwards:
+#   #   - guest: 80
+#   #     host: 8080
+#   #   - guest: 443
+#   #     host: 4433
+#   windows: false
+- name: grafana-01
+  ansible_groups:
+    - grafana
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.61
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 1024
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: kibana-01
+  ansible_groups:
+    - kibana
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.71
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 1024
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false

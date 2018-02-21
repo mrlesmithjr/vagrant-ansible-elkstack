@@ -1,0 +1,6 @@
+---
+# defines if rsyslog should be configured to listen on tcp/514
+rsyslog_allow_tcp: true
+
+# defines if rsyslog should be configured to listen on udp/514
+rsyslog_allow_udp: true

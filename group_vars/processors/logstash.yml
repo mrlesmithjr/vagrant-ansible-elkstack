@@ -1,0 +1,19 @@
+---
+logstash_inputs:
+  - type: rabbitmq
+    exchange: logstash
+    host: "{{ vip }}"
+    user: logstash
+    password: logstash
+
+logstash_outputs:
+  - output: elasticsearch
+    hosts:
+      - "{{ vip }}:9200"
+    #node, transport or http....http is the only protocol supported in 2.x+
+    protocol: http
+    # flush_size: 5000
+
+# Define the timezone you would like logs to parsed against
+# America/New_York, UTC, end etc.
+logstash_timezone: "{{ timezone }}"

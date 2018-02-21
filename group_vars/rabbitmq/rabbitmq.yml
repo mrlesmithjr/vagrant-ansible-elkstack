@@ -1,0 +1,48 @@
+---
+rabbitmq_config:
+  - queue_name: logstash
+    durable: true
+    exchange_name: logstash
+    type: direct
+    routing_key: logstash
+    tags: ha-mode=all,ha-sync-mode=automatic
+
+# Defines if rabbitmq ha should be configured
+rabbitmq_config_ha: true
+
+rabbitmq_config_service: false
+
+# Defines if setting up a rabbitmq cluster
+rabbitmq_enable_clustering: true
+
+rabbitmq_listeners: []
+  # - '127.0.0.1'
+  # - '::1'
+
+# Defines the inventory host that should be considered master
+rabbitmq_master: "{{ groups['rabbitmq'][0] }}"
+
+# Define admin user to create in order to login to WebUI
+rabbitmq_users:
+  - name: logstash
+    password: logstash
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    # Define comma separated list of tags to assign to user:
+    # management,policymaker,monitoring,administrator
+    # required for management plugin.
+    # https://www.rabbitmq.com/management.html
+    tags: administrator
+  - name: rabbitmqadmin
+    password: rabbitmqadmin
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    # Define comma separated list of tags to assign to user:
+    # management,policymaker,monitoring,administrator
+    # required for management plugin.
+    # https://www.rabbitmq.com/management.html
+    tags: administrator

@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: Larry Smith Jr.
+  description: An Ansible role to install/configure Grafana
+
+  license: MIT
+  min_ansible_version: 1.2
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+    - utopic
+    - vivid
+    - xenial
+  - name: Debian
+    versions:
+    - jessie
+
+  categories:
+  - monitoring
+  - system
+dependencies: []

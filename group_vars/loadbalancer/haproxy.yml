@@ -1,0 +1,205 @@
+---
+# Defines is HAProxy should be configured
+haproxy_config: true
+
+haproxy_configs:
+  - name: elasticsearch-9200
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: elasticsearch-nodes
+    backend_servers_bind_port: 9200
+    backend_servers: "{{ groups['elasticsearch'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 9200
+    frontend_name: elasticsearch-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: http
+    options:
+      - httplog
+      # - 'httpchk'
+    stickiness: false
+  - name: grafana-3000
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: grafana-nodes
+    backend_servers_bind_port: 3000
+    backend_servers: "{{ groups['grafana'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 3000
+    frontend_name: grafana-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: http
+    options:
+      - httplog
+      # - 'httpchk'
+    stickiness: true
+  - name: kibana-5601
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: kibana-nodes
+    backend_servers_bind_port: 5601
+    backend_servers: "{{ groups['kibana'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 5601
+    frontend_name: kibana-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: http
+    options:
+      - httplog
+      # - 'httpchk'
+    stickiness: true
+  - name: rabbitmq-5672
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: rabbitmq-nodes
+    backend_servers_bind_port: 5672
+    backend_servers: "{{ groups['rabbitmq'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 5672
+    frontend_name: rabbitmq-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: tcp
+    options:
+      # - httplog
+      # - httpchk
+      - tcplog
+    stickiness: false
+  - name: rabbitmq-15672
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: rabbitmq-nodes
+    backend_servers_bind_port: 15672
+    backend_servers: "{{ groups['rabbitmq'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 15672
+    frontend_name: rabbitmq-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: tcp
+    options:
+      # - httplog
+      # - httpchk
+      - tcplog
+    stickiness: false
+  # - name: redis-6379
+  #   backend_backups: false
+  #   backend_backups_primary: []
+  #   backend_checks: true
+  #   backend_name: redis-nodes
+  #   backend_servers_bind_port: 6379
+  #   backend_servers: "{{ groups['redis'] }}"
+  #   balance: roundrobin
+  #   default_server_options:
+  #     - name: maxconn
+  #       value: 256
+  #     - name: maxqueue
+  #       value: 128
+  #     - name: weight
+  #       value: 100
+  #   enabled: true
+  #   frontend_bind_address: "{{ haproxy_lb_vip }}"
+  #   frontend_bind_port: 6379
+  #   frontend_name: redis-in
+  #   frontend_ssl: false
+  #   # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+  #   mode: tcp
+  #   options:
+  #     - tcplog
+  #     - tcp-check
+  #     # - 'httpchk'
+  #   stickiness: false
+  #   tcp_checks:
+  #     # - connect
+  #     - send PING\r\n
+  #     - expect string +PONG
+  #     - send info\ replication\r\n
+  #     - expect string role:master
+  #     - send QUIT\r\n
+  #     - expect string +OK
+  - name: syslog-10514
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: pre_processors-nodes
+    backend_servers_bind_port: 10514
+    backend_servers: "{{ groups['pre_processors'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: true
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 10514
+    frontend_name: syslog-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: tcp
+    options:
+      # - httplog
+      # - httpchk
+      - tcplog
+    stickiness: false
+
+haproxy_lb_vip: "{{ vip }}"
+
+haproxy_pri_domain_name: "{{ pri_domain_name }}"
+
+haproxy_version: 1.8

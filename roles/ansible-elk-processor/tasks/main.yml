@@ -1,0 +1,9 @@
+---
+# tasks file for ansible-elk-processor
+- include: set_facts.yml
+
+- include: config_logstash.yml
+  when: config_logstash
+
+- include: config_blacklists.yml
+  when: enable_dns_blacklist_filtering

@@ -1,0 +1,8 @@
+---
+logstash_outputs:
+  - output: rabbitmq
+    exchange: logstash
+    exchange_type: direct
+    host: "{{ vip }}"
+    user: logstash
+    password: logstash
