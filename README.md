@@ -20,6 +20,21 @@ cd vagrant-ansible-elkstack
 vagrant up
 ```
 
+### Kibana
+
+Once everything has been spun up you can connect to the [Kibana WebUI](http://192.168.250.100:5601)
+and setup the index pattern as seen in the screenshot below:
+
+![Kibana index pattern setup](images/2018/02/kibana-index-pattern-setup.png)
+
+After clicking `Create` you will now see:
+
+![Kibana - Logstash index pattern](images/2018/02/kibana-logstash-index-pattern.png)
+
+And you are now ready to begin exploring some events, so click `Discover`
+
+![Kibana - Logstash index pattern - Discover](images/2018/02/kibana-logstash-index-pattern-discover.png)
+
 ### Tearing Down
 
 When you are done tear it all down easily...
