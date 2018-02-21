@@ -2,6 +2,7 @@
 - src: https://github.com/mrlesmithjr/ansible-change-hostname
 - src: https://github.com/mrlesmithjr/ansible-dnsmasq
 - src: https://github.com/mrlesmithjr/ansible-elasticsearch
+- src: https://github.com/mrlesmithjr/ansible-elk-pre-processor
 - src: https://github.com/mrlesmithjr/ansible-elk-processor
 - src: https://github.com/mrlesmithjr/ansible-etc-hosts
 - src: https://github.com/mrlesmithjr/ansible-grafana

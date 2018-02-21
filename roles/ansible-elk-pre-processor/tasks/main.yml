@@ -1,0 +1,8 @@
+---
+# tasks file for ansible-elk-pre-processor
+- include: set_facts.yml
+
+- include: config_logstash.yml
+  tags:
+    - config_logstash
+  when: config_logstash
