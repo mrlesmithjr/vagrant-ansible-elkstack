@@ -120,3 +120,36 @@ grafana-01
 [kibana]
 kibana-01
 ```
+
+## Testing
+
+For some testing to ensure that you can get a good sample of different log types
+you can spin up the included Docker Wordpress stack. The logging driver within
+the `docker-compose.yml` has been defined as below:
+
+```yaml
+logging:
+  driver: syslog
+  options:
+    syslog-address: "tcp://192.168.250.100"
+```
+
+To spin the stack up you need to ensure that you have Docker installed and functional
+on your workstation. So to spin it up just do the following:
+
+```bash
+cd tests/docker-ansible-wordpress
+docker-compose up
+```
+
+And you should see the following:
+
+```bash
+db_1         | WARNING: no logs are available with the 'syslog' log driver
+wordpress_1  | WARNING: no logs are available with the 'syslog' log driver
+```
+
+Now head over to your [Kibana WebUI](http://192.168.250.100:5601) and you should
+see events such as below:
+
+![Kibana - Docker Wordpress stack events](images/2018/02/kibana-docker-wordpress-stack-events.png)
