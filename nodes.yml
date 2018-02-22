@@ -1,6 +1,7 @@
 ---
-- name: lb-01-1
+- name: lb-01
   ansible_groups:
+    - elkstack
     - loadbalancers
   box: mrlesmithjr/xenial64
   desktop: false
@@ -26,8 +27,9 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-- name: lb-01-2
+- name: lb-02
   ansible_groups:
+    - elkstack
     - loadbalancers
   box: mrlesmithjr/xenial64
   desktop: false
@@ -56,6 +58,7 @@
 - name: broker-01
   ansible_groups:
     - brokers
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -83,6 +86,7 @@
 - name: broker-02
   ansible_groups:
     - brokers
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -110,6 +114,7 @@
 - name: broker-03
   ansible_groups:
     - brokers
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -136,6 +141,7 @@
   windows: false
 - name: pre-processor-01
   ansible_groups:
+    - elkstack
     - pre_processors
   box: mrlesmithjr/xenial64
   desktop: false
@@ -161,35 +167,9 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-# - name: pre-processor-02
-#   ansible_groups:
-#     - pre_processors
-#   box: mrlesmithjr/xenial64
-#   desktop: false
-#   # disks:
-#   #   - size: 10
-#   #     controller: "SATA Controller"
-#   #   - size: 10
-#   #     controller: "SATA Controller"
-#   interfaces:
-#     - ip: 192.168.250.32
-#       auto_config: true
-#       method: static
-#   #   - ip: 192.168.1.10
-#   #     auto_config: false
-#   #     method: static
-#   #     network_name: network-1
-#   mem: 1024
-#   provision: true
-#   vcpu: 1
-#   # port_forwards:
-#   #   - guest: 80
-#   #     host: 8080
-#   #   - guest: 443
-#   #     host: 4433
-#   windows: false
 - name: processor-01
   ansible_groups:
+    - elkstack
     - processors
   box: mrlesmithjr/xenial64
   desktop: false
@@ -218,6 +198,7 @@
 - name: es-01
   ansible_groups:
     - elasticsearch
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -245,6 +226,7 @@
 - name: es-02
   ansible_groups:
     - elasticsearch
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -272,6 +254,7 @@
 - name: es-03
   ansible_groups:
     - elasticsearch
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -296,9 +279,10 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-- name: grafana-01
+- name: dashboard-01
   ansible_groups:
-    - grafana
+    - dashboard
+    - elkstack
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -308,33 +292,6 @@
   #     controller: "SATA Controller"
   interfaces:
     - ip: 192.168.250.61
-      auto_config: true
-      method: static
-  #   - ip: 192.168.1.10
-  #     auto_config: false
-  #     method: static
-  #     network_name: network-1
-  mem: 1024
-  provision: true
-  vcpu: 1
-  # port_forwards:
-  #   - guest: 80
-  #     host: 8080
-  #   - guest: 443
-  #     host: 4433
-  windows: false
-- name: kibana-01
-  ansible_groups:
-    - kibana
-  box: mrlesmithjr/xenial64
-  desktop: false
-  # disks:
-  #   - size: 10
-  #     controller: "SATA Controller"
-  #   - size: 10
-  #     controller: "SATA Controller"
-  interfaces:
-    - ip: 192.168.250.71
       auto_config: true
       method: static
   #   - ip: 192.168.1.10

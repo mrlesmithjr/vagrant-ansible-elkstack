@@ -1,0 +1,72 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    # Defines the number of brokers to spin up
+    elk_brokers:
+      count: 3
+      cpu: 1
+      memory: 512
+    # Defines the number of dashboards to spin up
+    elk_dashboards:
+      count: 1
+      cpu: 1
+      memory: 1024
+    # Defines the dns domain name for environment
+    elk_domain: test.vagrant.local
+    # Defines the number of Elasticsearch nodes to spin up
+    elk_elasticsearch:
+      count: 3
+      cpu: 1
+      memory: 1024
+    # Defines the netmask cidr for environment
+    elk_ip_netmask: 24
+    # Defines the subnet for environment
+    elk_ip_subnet: 192.168.250.0
+    # Defines the number of loadbalancers to spin up
+    elk_loadbalancers:
+      count: 2
+      cpu: 1
+      memory: 512
+    # Defines the number of processors to spin up
+    elk_preprocessors:
+      count: 1
+      cpu: 1
+      memory: 1024
+    # Defines the primary interface of VMs to use
+    elk_pri_interface: enp0s8
+    # Defines the number of processors to spin up
+    elk_processors:
+      count: 1
+      cpu: 1
+      memory: 1024
+    # Defines the VIP of environment
+    elk_vip: 192.168.250.100
+  tasks:
+    # Generates an updated nodes.yml for Vagrant
+    - name: Generating Nodes
+      template:
+        src: templates/nodes.yml.j2
+        dest: ./nodes.yml
+
+    # Ensures vip: is defined properly based on elk_vip
+    - name: Ensuring elk_vip Is Defined Properly in group_vars/all/all.yml
+      lineinfile:
+        path: group_vars/all/all.yml
+        regexp: "^vip:"
+        line: "vip: {{ elk_vip }}"
+
+    # Ensures pri_domain_name is defined properly based on elk_domain
+    - name: Ensuring elk_domain Is Defined Properly in group_vars/all/all.yml
+      lineinfile:
+        path: group_vars/all/all.yml
+        regexp: "^pri_domain_name:"
+        line: "pri_domain_name: {{ elk_domain }}"
+
+    # Ensures pri_interface is defined properly based on elk_pri_interface
+    - name: Ensuring elk_pri_interface Is Defined Properly in group_vars/all/all.yml
+      lineinfile:
+        path: group_vars/all/all.yml
+        regexp: "^pri_interface:"
+        line: "pri_interface: {{ elk_pri_interface }}"

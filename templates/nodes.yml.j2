@@ -1,0 +1,201 @@
+---
+{% set _ip_subnet = elk_ip_subnet|ipsubnet(elk_ip_netmask) %}
+{% set _ip_subnet_size = _ip_subnet|ipaddr('size') %}
+{% for lb in range(elk_loadbalancers['count']) %}
+{%   set _starting_ip = loop.index + 10 %}
+{%   set _ip_addr = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('address') %}
+{%   set _gateway = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('1')|ipaddr('address') %}
+- name: lb-0{{ loop.index }}
+  ansible_groups:
+    - elkstack
+    - loadbalancers
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: {{ _ip_addr }}
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: {{ elk_loadbalancers['memory'] }}
+  provision: true
+  vcpu: {{ elk_loadbalancers['cpu'] }}
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+{% endfor %}
+{% for broker in range(elk_brokers['count']) %}
+{%   set _starting_ip = loop.index + 20 %}
+{%   set _ip_addr = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('address') %}
+{%   set _gateway = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('1')|ipaddr('address') %}
+- name: broker-0{{ loop.index }}
+  ansible_groups:
+    - brokers
+    - elkstack
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: {{ _ip_addr }}
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: {{ elk_brokers['memory'] }}
+  provision: true
+  vcpu: {{ elk_brokers['cpu'] }}
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+{% endfor %}
+{% for pre_processor in range(elk_preprocessors['count']) %}
+{%   set _starting_ip = loop.index + 30 %}
+{%   set _ip_addr = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('address') %}
+{%   set _gateway = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('1')|ipaddr('address') %}
+- name: pre-processor-0{{ loop.index }}
+  ansible_groups:
+    - elkstack
+    - pre_processors
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: {{ _ip_addr }}
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: {{ elk_preprocessors['memory'] }}
+  provision: true
+  vcpu: {{ elk_preprocessors['cpu'] }}
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+{% endfor %}
+{% for processor in range(elk_processors['count']) %}
+{%   set _starting_ip = loop.index + 40 %}
+{%   set _ip_addr = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('address') %}
+{%   set _gateway = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('1')|ipaddr('address') %}
+- name: processor-0{{ loop.index }}
+  ansible_groups:
+    - elkstack
+    - processors
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: {{ _ip_addr }}
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: {{ elk_processors['memory'] }}
+  provision: true
+  vcpu: {{ elk_processors['cpu'] }}
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+{% endfor %}
+{% for es in range(elk_elasticsearch['count']) %}
+{%   set _starting_ip = loop.index + 50 %}
+{%   set _ip_addr = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('address') %}
+{%   set _gateway = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('1')|ipaddr('address') %}
+- name: es-0{{ loop.index }}
+  ansible_groups:
+    - elasticsearch
+    - elkstack
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: {{ _ip_addr }}
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: {{ elk_elasticsearch['memory'] }}
+  provision: true
+  vcpu: {{ elk_elasticsearch['cpu'] }}
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+{% endfor %}
+{% for dashboard in range(elk_dashboards['count']) %}
+{%   set _starting_ip = loop.index + 60 %}
+{%   set _ip_addr = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('address') %}
+{%   set _gateway = _ip_subnet|ipaddr('net')|ipaddr(_starting_ip)|ipaddr('1')|ipaddr('address') %}
+- name: dashboard-0{{ loop.index }}
+  ansible_groups:
+    - dashboard
+    - elkstack
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: {{ _ip_addr }}
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: {{ elk_dashboards['memory'] }}
+  provision: true
+  vcpu: {{ elk_dashboards['cpu'] }}
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+{% endfor %}
