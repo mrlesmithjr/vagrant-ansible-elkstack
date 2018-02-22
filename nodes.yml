@@ -28,7 +28,6 @@
   windows: false
 - name: lb-01-2
   ansible_groups:
-    - loadbalancer
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -233,7 +232,7 @@
   #     auto_config: false
   #     method: static
   #     network_name: network-1
-  mem: 2048
+  mem: 1024
   provision: true
   vcpu: 1
   # port_forwards:
@@ -242,60 +241,60 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-# - name: es-02
-#   ansible_groups:
-#     - elasticsearch
-#   box: mrlesmithjr/xenial64
-#   desktop: false
-#   # disks:
-#   #   - size: 10
-#   #     controller: "SATA Controller"
-#   #   - size: 10
-#   #     controller: "SATA Controller"
-#   interfaces:
-#     - ip: 192.168.250.52
-#       auto_config: true
-#       method: static
-#   #   - ip: 192.168.1.10
-#   #     auto_config: false
-#   #     method: static
-#   #     network_name: network-1
-#   mem: 2048
-#   provision: true
-#   vcpu: 1
-#   # port_forwards:
-#   #   - guest: 80
-#   #     host: 8080
-#   #   - guest: 443
-#   #     host: 4433
-#   windows: false
-# - name: es-03
-#   ansible_groups:
-#     - elasticsearch
-#   box: mrlesmithjr/xenial64
-#   desktop: false
-#   # disks:
-#   #   - size: 10
-#   #     controller: "SATA Controller"
-#   #   - size: 10
-#   #     controller: "SATA Controller"
-#   interfaces:
-#     - ip: 192.168.250.53
-#       auto_config: true
-#       method: static
-#   #   - ip: 192.168.1.10
-#   #     auto_config: false
-#   #     method: static
-#   #     network_name: network-1
-#   mem: 2048
-#   provision: true
-#   vcpu: 1
-#   # port_forwards:
-#   #   - guest: 80
-#   #     host: 8080
-#   #   - guest: 443
-#   #     host: 4433
-#   windows: false
+- name: es-02
+  ansible_groups:
+    - elasticsearch
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.52
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 1024
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
+- name: es-03
+  ansible_groups:
+    - elasticsearch
+  box: mrlesmithjr/xenial64
+  desktop: false
+  # disks:
+  #   - size: 10
+  #     controller: "SATA Controller"
+  #   - size: 10
+  #     controller: "SATA Controller"
+  interfaces:
+    - ip: 192.168.250.53
+      auto_config: true
+      method: static
+  #   - ip: 192.168.1.10
+  #     auto_config: false
+  #     method: static
+  #     network_name: network-1
+  mem: 1024
+  provision: true
+  vcpu: 1
+  # port_forwards:
+  #   - guest: 80
+  #     host: 8080
+  #   - guest: 443
+  #     host: 4433
+  windows: false
 - name: grafana-01
   ansible_groups:
     - grafana
