@@ -8,7 +8,7 @@ keepalived_router_info:
         interval: 2
         weight: 2
     # Define inventory_hostname of node to be considered Master
-    master_node: "{{ groups['loadbalancer'][0] }}"
+    master_node: "{{ groups['loadbalancers'][0] }}"
     router_id: 50
     router_pri_backup: 100
     router_pri_master: 150

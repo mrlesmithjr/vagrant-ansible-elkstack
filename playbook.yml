@@ -39,7 +39,7 @@
   roles:
     - role: ansible-kibana
 
-- hosts: loadbalancer
+- hosts: loadbalancers
   roles:
     - role: ansible-keepalived
     - role: ansible-haproxy

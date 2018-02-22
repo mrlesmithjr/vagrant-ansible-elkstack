@@ -96,7 +96,7 @@ rabbit-01 ansible_host=127.0.0.1 ansible_port=2201 ansible_user='vagrant' ansibl
 rabbit-02 ansible_host=127.0.0.1 ansible_port=2202 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/rabbit-02/virtualbox/private_key'
 rabbit-03 ansible_host=127.0.0.1 ansible_port=2203 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/rabbit-03/virtualbox/private_key'
 
-[loadbalancer]
+[loadbalancers]
 lb-01-1
 lb-01-2
 

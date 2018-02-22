@@ -1,7 +1,7 @@
 ---
 - name: lb-01-1
   ansible_groups:
-    - loadbalancer
+    - loadbalancers
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -28,6 +28,7 @@
   windows: false
 - name: lb-01-2
   ansible_groups:
+    - loadbalancers
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
