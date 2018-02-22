@@ -8,6 +8,12 @@ elasticsearch:
 
   config_dir: /etc/elasticsearch
   data_dir: /var/lib/elasticsearch
+
+  # Defines the amount of memory to allocate
+  # Heap Size (defaults to 256m min, 1g max)
+  # 50% of max memory is good.
+  heap_size: "{{ (ansible_memtotal_mb * elasticsearch_heap_size_multiplier)|round|int }}m"
+
   home_dir: /usr/share/elasticsearch
   listen_interface: "{{ pri_interface }}"
   log_dir: /var/log/elasticsearch
