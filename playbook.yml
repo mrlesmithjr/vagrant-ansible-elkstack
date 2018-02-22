@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: elkstack
   roles:
     - role: ansible-change-hostname
     - role: ansible-etc-hosts
@@ -30,12 +30,9 @@
   roles:
     - role: ansible-elasticsearch
 
-- hosts: grafana
+- hosts: dashboard
   roles:
     - role: ansible-grafana
-
-- hosts: kibana
-  roles:
     - role: ansible-kibana
 
 - hosts: loadbalancers

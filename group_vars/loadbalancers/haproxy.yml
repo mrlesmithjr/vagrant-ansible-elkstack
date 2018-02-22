@@ -35,7 +35,7 @@ haproxy_configs:
     backend_checks: true
     backend_name: grafana-nodes
     backend_servers_bind_port: 3000
-    backend_servers: "{{ groups['grafana'] }}"
+    backend_servers: "{{ groups['dashboard'] }}"
     balance: roundrobin
     default_server_options:
       - name: maxconn
@@ -61,7 +61,7 @@ haproxy_configs:
     backend_checks: true
     backend_name: kibana-nodes
     backend_servers_bind_port: 5601
-    backend_servers: "{{ groups['kibana'] }}"
+    backend_servers: "{{ groups['dashboard'] }}"
     balance: roundrobin
     default_server_options:
       - name: maxconn
