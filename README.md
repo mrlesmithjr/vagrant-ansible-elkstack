@@ -92,18 +92,18 @@ lb-01-1 ansible_host=127.0.0.1 ansible_port=2222 ansible_user='vagrant' ansible_
 lb-01-2 ansible_host=127.0.0.1 ansible_port=2200 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/lb-01-2/virtualbox/private_key'
 pre-processor-01 ansible_host=127.0.0.1 ansible_port=2204 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/pre-processor-01/virtualbox/private_key'
 processor-01 ansible_host=127.0.0.1 ansible_port=2205 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/processor-01/virtualbox/private_key'
-rabbit-01 ansible_host=127.0.0.1 ansible_port=2201 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/rabbit-01/virtualbox/private_key'
-rabbit-02 ansible_host=127.0.0.1 ansible_port=2202 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/rabbit-02/virtualbox/private_key'
-rabbit-03 ansible_host=127.0.0.1 ansible_port=2203 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/rabbit-03/virtualbox/private_key'
+broker-01 ansible_host=127.0.0.1 ansible_port=2201 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/broker-01/virtualbox/private_key'
+broker-02 ansible_host=127.0.0.1 ansible_port=2202 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/broker-02/virtualbox/private_key'
+broker-03 ansible_host=127.0.0.1 ansible_port=2203 ansible_user='vagrant' ansible_ssh_private_key_file='/Users/larry/Git_Projects/Personal/GitHub/mrlesmithjr/vagrant-ansible-elkstack/.vagrant/machines/broker-03/virtualbox/private_key'
 
 [loadbalancers]
 lb-01-1
 lb-01-2
 
-[rabbitmq]
-rabbit-01
-rabbit-02
-rabbit-03
+[brokers]
+broker-01
+broker-02
+broker-03
 
 [pre_processors]
 pre-processor-01

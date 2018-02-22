@@ -53,9 +53,9 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-- name: rabbit-01
+- name: broker-01
   ansible_groups:
-    - rabbitmq
+    - brokers
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -80,9 +80,9 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-- name: rabbit-02
+- name: broker-02
   ansible_groups:
-    - rabbitmq
+    - brokers
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:
@@ -107,9 +107,9 @@
   #   - guest: 443
   #     host: 4433
   windows: false
-- name: rabbit-03
+- name: broker-03
   ansible_groups:
-    - rabbitmq
+    - brokers
   box: mrlesmithjr/xenial64
   desktop: false
   # disks:

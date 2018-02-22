@@ -7,13 +7,12 @@
     - role: ansible-timezone
     - role: ansible-rsyslog
 
-# - hosts: redis
-#   roles:
-#     - role: ansible-redis
-
-- hosts: rabbitmq
+- hosts: brokers
   roles:
     - role: ansible-rabbitmq
+      when: brokers_use_rabbitmq
+    - role: ansible-redis
+      when: brokers_use_redis
 
 - hosts: pre_processors
   roles:

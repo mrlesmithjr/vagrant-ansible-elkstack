@@ -6,3 +6,5 @@ logstash_outputs:
     host: "{{ vip }}"
     user: logstash
     password: logstash
+  # - output: redis
+  #   host: "{{ vip }}"

@@ -87,7 +87,7 @@ haproxy_configs:
     backend_checks: true
     backend_name: rabbitmq-nodes
     backend_servers_bind_port: 5672
-    backend_servers: "{{ groups['rabbitmq'] }}"
+    backend_servers: "{{ groups['brokers'] }}"
     balance: roundrobin
     default_server_options:
       - name: maxconn
@@ -96,7 +96,7 @@ haproxy_configs:
         value: 128
       - name: weight
         value: 100
-    enabled: true
+    enabled: "{{ brokers_use_rabbitmq }}"
     frontend_bind_address: "{{ haproxy_lb_vip }}"
     frontend_bind_port: 5672
     frontend_name: rabbitmq-in
@@ -114,7 +114,7 @@ haproxy_configs:
     backend_checks: true
     backend_name: rabbitmq-nodes
     backend_servers_bind_port: 15672
-    backend_servers: "{{ groups['rabbitmq'] }}"
+    backend_servers: "{{ groups['brokers'] }}"
     balance: roundrobin
     default_server_options:
       - name: maxconn
@@ -123,7 +123,7 @@ haproxy_configs:
         value: 128
       - name: weight
         value: 100
-    enabled: true
+    enabled: "{{ brokers_use_rabbitmq }}"
     frontend_bind_address: "{{ haproxy_lb_vip }}"
     frontend_bind_port: 15672
     frontend_name: rabbitmq-in
@@ -135,41 +135,41 @@ haproxy_configs:
       # - httpchk
       - tcplog
     stickiness: false
-  # - name: redis-6379
-  #   backend_backups: false
-  #   backend_backups_primary: []
-  #   backend_checks: true
-  #   backend_name: redis-nodes
-  #   backend_servers_bind_port: 6379
-  #   backend_servers: "{{ groups['redis'] }}"
-  #   balance: roundrobin
-  #   default_server_options:
-  #     - name: maxconn
-  #       value: 256
-  #     - name: maxqueue
-  #       value: 128
-  #     - name: weight
-  #       value: 100
-  #   enabled: true
-  #   frontend_bind_address: "{{ haproxy_lb_vip }}"
-  #   frontend_bind_port: 6379
-  #   frontend_name: redis-in
-  #   frontend_ssl: false
-  #   # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
-  #   mode: tcp
-  #   options:
-  #     - tcplog
-  #     - tcp-check
-  #     # - 'httpchk'
-  #   stickiness: false
-  #   tcp_checks:
-  #     # - connect
-  #     - send PING\r\n
-  #     - expect string +PONG
-  #     - send info\ replication\r\n
-  #     - expect string role:master
-  #     - send QUIT\r\n
-  #     - expect string +OK
+  - name: redis-6379
+    backend_backups: false
+    backend_backups_primary: []
+    backend_checks: true
+    backend_name: redis-nodes
+    backend_servers_bind_port: 6379
+    backend_servers: "{{ groups['brokers'] }}"
+    balance: roundrobin
+    default_server_options:
+      - name: maxconn
+        value: 256
+      - name: maxqueue
+        value: 128
+      - name: weight
+        value: 100
+    enabled: "{{ brokers_use_redis }}"
+    frontend_bind_address: "{{ haproxy_lb_vip }}"
+    frontend_bind_port: 6379
+    frontend_name: redis-in
+    frontend_ssl: false
+    # frontend_ssl_cert: "{{ haproxy_load_balancer_ssl['bundled_cert'] }}"
+    mode: tcp
+    options:
+      - tcplog
+      - tcp-check
+      # - 'httpchk'
+    stickiness: false
+    tcp_checks:
+      # - connect
+      - send PING\r\n
+      - expect string +PONG
+      - send info\ replication\r\n
+      - expect string role:master
+      - send QUIT\r\n
+      - expect string +OK
   - name: syslog-10514
     backend_backups: false
     backend_backups_primary: []

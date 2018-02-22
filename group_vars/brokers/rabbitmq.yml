@@ -20,7 +20,7 @@ rabbitmq_listeners: []
   # - '::1'
 
 # Defines the inventory host that should be considered master
-rabbitmq_master: "{{ groups['rabbitmq'][0] }}"
+rabbitmq_master: "{{ groups['brokers'][0] }}"
 
 # Define admin user to create in order to login to WebUI
 rabbitmq_users:

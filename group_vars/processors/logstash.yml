@@ -5,6 +5,10 @@ logstash_inputs:
     host: "{{ vip }}"
     user: logstash
     password: logstash
+  # - type: redis
+  #   # batch_count: 1000
+  #   host: "{{ vip }}"
+  #   # threads: 2
 
 logstash_outputs:
   - output: elasticsearch

@@ -1,4 +1,16 @@
 ---
+# Defines if brokers should use RabbitMQ
+# This is the default. If you change this to false in preference of
+# using Redis. Then you will need to adjust the pre_processors/logstash.yml
+# logstash_outputs and processors/logstash.yml logstash_inputs
+brokers_use_rabbitmq: true
+
+# Defines if brokers should use Redis
+# This is not the default. If you change this to true in preference of
+# using RabbitMQ. Then you will need to adjust the pre_processors/logstash.yml
+# logstash_outputs and processors/logstash.yml logstash_inputs
+brokers_use_redis: false
+
 pri_domain_name: test.vagrant.local
 
 pri_interface: enp0s8
