@@ -9,7 +9,7 @@
   ansible_groups:
     - elkstack
     - loadbalancers
-  box: mrlesmithjr/xenial64
+  box: {{ vagrant_image }}
   desktop: false
   # disks:
   #   - size: 10
@@ -42,7 +42,7 @@
   ansible_groups:
     - brokers
     - elkstack
-  box: mrlesmithjr/xenial64
+  box: {{ vagrant_image }}
   desktop: false
   # disks:
   #   - size: 10
@@ -75,7 +75,7 @@
   ansible_groups:
     - elkstack
     - pre_processors
-  box: mrlesmithjr/xenial64
+  box: {{ vagrant_image }}
   desktop: false
   # disks:
   #   - size: 10
@@ -108,7 +108,7 @@
   ansible_groups:
     - elkstack
     - processors
-  box: mrlesmithjr/xenial64
+  box: {{ vagrant_image }}
   desktop: false
   # disks:
   #   - size: 10
@@ -141,7 +141,7 @@
   ansible_groups:
     - elasticsearch
     - elkstack
-  box: mrlesmithjr/xenial64
+  box: {{ vagrant_image }}
   desktop: false
   # disks:
   #   - size: 10
@@ -174,7 +174,7 @@
   ansible_groups:
     - dashboard
     - elkstack
-  box: mrlesmithjr/xenial64
+  box: {{ vagrant_image }}
   desktop: false
   # disks:
   #   - size: 10

@@ -43,6 +43,8 @@
       memory: 1024
     # Defines the VIP of environment
     elk_vip: 192.168.250.100
+    # Defines the Vagrant box image to use
+    vagrant_image: mrlesmithjr/xenial64
   tasks:
     # Generates an updated nodes.yml for Vagrant
     - name: Generating Nodes
