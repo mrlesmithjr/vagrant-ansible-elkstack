@@ -12,5 +12,6 @@
 - src: https://github.com/mrlesmithjr/ansible-logstash
 - src: https://github.com/mrlesmithjr/ansible-ntp
 - src: https://github.com/mrlesmithjr/ansible-rabbitmq
+- src: https://github.com/mrlesmithjr/ansible-redis
 - src: https://github.com/mrlesmithjr/ansible-rsyslog
 - src: https://github.com/mrlesmithjr/ansible-timezone
