@@ -1,6 +1,7 @@
 ---
 logstash_inputs:
   - type: rabbitmq
+    auto_delete: true
     exchange: logstash
     host: "{{ vip }}"
     user: logstash
